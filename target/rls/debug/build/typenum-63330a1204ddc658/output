@@ -1,0 +1,2 @@
+cargo:rustc-env=TYPENUM_BUILD_CONSTS=/Users/andonmitev/Desktop/FINAL SHIT/my-first-contract/target/rls/debug/build/typenum-63330a1204ddc658/out/consts.rs
+cargo:rustc-env=TYPENUM_BUILD_OP=/Users/andonmitev/Desktop/FINAL SHIT/my-first-contract/target/rls/debug/build/typenum-63330a1204ddc658/out/op.rs
