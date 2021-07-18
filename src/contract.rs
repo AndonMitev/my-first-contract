@@ -49,6 +49,9 @@ pub fn try_claim<S: Storage, A: Api, Q: Querier>(
     env: Env,
     secret: String,
 ) -> StdResult<HandleResponse> {
+    if secret.len() != 64 {
+        return Err(StdError::generic_err("Invalid secret length"));
+    }
     let state = config_read(&deps.storage).load()?;
 
     let mut hasher = Sha256::default();
@@ -63,6 +66,12 @@ pub fn try_claim<S: Storage, A: Api, Q: Querier>(
     }
 
     let balances: Vec<Coin> = deps.querier.query_all_balances(&env.contract.address)?;
+
+    let sum_balance: u128 = balances.iter().map(|b| b.amount.u128()).sum();
+
+    if sum_balance == 0 {
+        return Err(StdError::generic_err("Balance is 0"));
+    }
 
     let buyer = deps.api.human_address(&state.buyer)?;
 
@@ -88,6 +97,12 @@ pub fn try_refund<S: Storage, A: Api, Q: Querier>(
     }
 
     let balances: Vec<Coin> = deps.querier.query_all_balances(&env.contract.address)?;
+
+    let sum_balance: u128 = balances.iter().map(|b| b.amount.u128()).sum();
+
+    if sum_balance == 0 {
+        return Err(StdError::generic_err("Balance is 0"));
+    }
 
     let seller = deps.api.human_address(&state.seller)?;
 
